@@ -33,6 +33,7 @@ def venn3_circles(
     normalize_to: Optional[float] = None,
     alpha: float = 1.0,
     color: Any = "black",
+    palette: Optional[Any] = None,
     linestyle: str = "solid",
     linewidth: str = 2.0,
     ax: Optional[Axes] = None,
@@ -80,12 +81,26 @@ def venn3_circles(
     if layout_algorithm is None:
         layout_algorithm = DefaultLayoutAlgorithm(normalize_to=normalize_to or 1.0)
 
+    if palette is not None:
+        if color != "black":
+            warnings.warn(
+                "Both palette and color specified. Ignoring color and using palette."
+            )
+        if isinstance(palette, str):
+            import seaborn as sns
+            colors = sns.color_palette(palette, 3)
+        else:
+            assert len(palette) >= 3, "Palette must provide at least three colors (only first three will be used)."
+            colors = palette[:3]
+    else:
+        colors = [color, color, color]
+
     layout = layout_algorithm(subsets)
     if ax is None:
         ax = gca()
     prepare_venn_axes(ax, layout.centers, layout.radii)
     result = []
-    for c, r in zip(layout.centers, layout.radii):
+    for c, r, color in zip(layout.centers, layout.radii, colors):
         circle = Circle(
             c.asarray(),
             r,
