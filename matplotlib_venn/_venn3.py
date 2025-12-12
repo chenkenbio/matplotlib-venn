@@ -125,6 +125,7 @@ def venn3(
     ax: Optional[Axes] = None,
     subset_label_formatter: Optional[Callable[[float], str]] = None,
     layout_algorithm: Optional[VennLayoutAlgorithm] = None,
+    subset_fontsize: Optional[float] = None,
 ) -> VennDiagram:
     """Plots a 3-set area-weighted Venn diagram.
 
@@ -147,6 +148,7 @@ def venn3(
             Defaults to "str".
         layout_algorithm: The layout algorithm to determine the scale and position of the three circles. Defaults to
             matplotlib_venn.layout.venn3.DefaultLayoutAlgorithm().
+        subset_fontsize: Font size for subset labels. Defaults to matplotlib's default font size if not specified.
 
     Returns:
         a `VennDiagram` object that keeps references to the layout information, ``Text`` and ``Patch`` objects used on the plot.
@@ -190,7 +192,7 @@ def venn3(
 
     layout = layout_algorithm(subsets, set_labels)
     return _render_layout(
-        layout, subsets, set_labels, set_colors, alpha, ax, subset_label_formatter
+        layout, subsets, set_labels, set_colors, alpha, ax, subset_label_formatter, subset_fontsize
     )
 
 
@@ -202,6 +204,7 @@ def _render_layout(
     alpha: float = 0.4,
     ax: Optional[Axes] = None,
     subset_label_formatter: Optional[Callable[[float], str]] = None,
+    subset_fontsize: Optional[float] = None,
 ) -> VennDiagram:
     """Given a VennLayout and the relevant rendering information, generates the diagram."""
     if subset_label_formatter is None:
@@ -245,7 +248,11 @@ def _render_layout(
     label_positions = [r.label_position() for r in regions]
     subset_labels = [
         (
-            ax.text(lbl[0], lbl[1], subset_label_formatter(s), va="center", ha="center")
+            ax.text(
+                lbl[0], lbl[1], subset_label_formatter(s), 
+                va="center", ha="center",
+                fontsize=subset_fontsize
+            )
             if lbl is not None
             else None
         )
