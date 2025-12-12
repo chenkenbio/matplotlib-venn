@@ -249,9 +249,12 @@ def _render_layout(
     subset_labels = [
         (
             ax.text(
-                lbl[0], lbl[1], subset_label_formatter(s), 
-                va="center", ha="center",
-                fontsize=subset_fontsize
+                lbl[0],
+                lbl[1],
+                subset_label_formatter(s),
+                va="center",
+                ha="center",
+                fontsize=subset_fontsize,
             )
             if lbl is not None
             else None

@@ -65,7 +65,10 @@ def test_venn2_subset_fontsize_with_dict_input():
 def test_venn3_subset_fontsize_with_dict_input():
     """Test that subset_fontsize works with dict input"""
     fontsize = 17.0
-    v = mv.venn3(subsets={'100': 1, '010': 1, '110': 1, '001': 1, '101': 1, '011': 1, '111': 1}, subset_fontsize=fontsize)
+    v = mv.venn3(
+        subsets={'100': 1, '010': 1, '110': 1, '001': 1, '101': 1, '011': 1, '111': 1},
+        subset_fontsize=fontsize
+    )
     for label_id in ['100', '010', '110', '001', '101', '011', '111']:
         label = v.get_label_by_id(label_id)
         if label:
